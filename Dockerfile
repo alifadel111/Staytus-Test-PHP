@@ -1,5 +1,6 @@
 
-# Use the official PHP base image
+# Use the official PHP base image with the new image
+# changes with the image require changes with dependencies
 FROM php:8.2-cli
 
 # # Set the working directory
