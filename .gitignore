@@ -163,6 +163,6 @@ bower_components
 /bootstrap/compiled.php
 .env.*.php
 .env.*
-/vendor
+#/vendor
 /node_modules
 .env

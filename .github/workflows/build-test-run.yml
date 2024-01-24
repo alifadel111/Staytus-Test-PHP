@@ -1,3 +1,5 @@
+# this file to run the unit tests that are included in the app 
+# runs every time there is a new push on the mail branch
 name: Laravel-test
 on:
   push:
