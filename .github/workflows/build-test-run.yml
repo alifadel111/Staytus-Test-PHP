@@ -61,7 +61,7 @@ jobs:
         shell: bash
         env:
          ECR_REGISTRY: 058264338839.dkr.ecr.us-east-1.amazonaws.com/ataytus-test-php
-         ECR_REPOSITORY: taytus-test-php
+         ECR_REPOSITORY: ataytus-test-php
          IMAGE_TAG: ${{ github.run_number }}
         run: |
            docker build "${{ inputs.docker_build_dir }}" -f "${{ inputs.path_to_dockerfile }}" -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
