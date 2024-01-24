@@ -45,16 +45,3 @@ jobs:
           DB_USERNAME: ${{ env.DB_USERNAME }}
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
         run: vendor/bin/phpunit
-
-      
-
-      - name: Build and Push Docker image to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REPOSITORY: phptest
-          IMAGE_TAG: ${{ github.run_number }}
-        run: |
-          docker build -t $DOCKER_REPOSITORY:$IMAGE_TAG .
-          docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-          docker push $DOCKER_REPOSITORY:$IMAGE_TAG
