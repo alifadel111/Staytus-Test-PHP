@@ -1,6 +1,4 @@
-
-name: Laravel
-
+name: Laravel 
 on:
   push:
     branches: [main]
@@ -47,26 +45,37 @@ jobs:
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
         run: vendor/bin/phpunit
 
+  build-and-push:
+    name: Build and Push to ECR
+    runs-on: ubuntu-latest
+    needs: laravel-tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-           registry: 058264338839.dkr.ecr.us-east-1.amazonaws.com/ataytus-test-php
-           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           aws-region: us-east-1
-  
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-publish
-        shell: bash
-        env:
-         ECR_REGISTRY: 058264338839.dkr.ecr.us-east-1.amazonaws.com/ataytus-test-php
-         ECR_REPOSITORY: ataytus-test-php
-         IMAGE_TAG: ${{ github.run_number }}
+
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
         run: |
-           docker build "${{ inputs.docker_build_dir }}" -f "${{ inputs.path_to_dockerfile }}" -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-           docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-           echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$ECR_REPOSITORY"
-           echo "image_tag=$IMAGE_TAG" 
-           echo "full_image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-    #try 8 
+          bash ./build/git_update.sh -v major
+
+      - name: Build, Tag, and Push the Image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ataytus-test-php
+          IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
