@@ -22,6 +22,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Set up Laravel environment
 RUN mv .env.example .env
+
 RUN php artisan key:generate
 
 # Expose port 8000 (PHP's built-in server default port)
