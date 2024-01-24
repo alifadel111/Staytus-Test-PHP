@@ -1,0 +1,13 @@
+FROM mysql:8.0
+
+# Copy the .env file into the container
+COPY .env /app/.env
+
+# Set the necessary environment variables from the .env file
+ENV $(cat /app/.env | grep -v ^# | xargs)
+
+# Expose the default MySQL port
+EXPOSE 3306
+
+# Start MySQL service
+CMD ["mysqld"]
