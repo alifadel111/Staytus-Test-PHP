@@ -18,24 +18,25 @@ jobs:
       run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
       run: php artisan key:generate
-    - name: Directory Permissions
+    - name: Set file permissions
       run: chmod -R 777 storage bootstrap/cache
-    - name: Opt into unsecure command execution
-      run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true >> $GITHUB_ENV"
+
     - name: Read database connection details from .env
       id: env
-      run: echo "::set-env name=DB_CONNECTION::$(grep -oP '^DB_CONNECTION=\K.*' .env)"
-    - run: echo "::set-env name=DB_HOST::$(grep -oP '^DB_HOST=\K.*' .env)"
-    - run: echo "::set-env name=DB_PORT::$(grep -oP '^DB_PORT=\K.*' .env)"
-    - run: echo "::set-env name=DB_DATABASE::$(grep -oP '^DB_DATABASE=\K.*' .env)"
-    - run: echo "::set-env name=DB_USERNAME::$(grep -oP '^DB_USERNAME=\K.*' .env)"
-    - run: echo "::set-env name=DB_PASSWORD::$(grep -oP '^DB_PASSWORD=\K.*' .env)"
+      run: |
+       echo "DB_CONNECTION=$(grep -oP '^DB_CONNECTION=\K.*' .env)" >> $GITHUB_ENV
+       echo "DB_HOST=$(grep -oP '^DB_HOST=\K.*' .env)" >> $GITHUB_ENV
+       echo "DB_PORT=$(grep -oP '^DB_PORT=\K.*' .env)" >> $GITHUB_ENV
+       echo "DB_DATABASE=$(grep -oP '^DB_DATABASE=\K.*' .env)" >> $GITHUB_ENV
+       echo "DB_USERNAME=$(grep -oP '^DB_USERNAME=\K.*' .env)" >> $GITHUB_ENV
+       echo "DB_PASSWORD=$(grep -oP '^DB_PASSWORD=\K.*' .env)" >> $GITHUB_ENV
+
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        DB_CONNECTION: ${{ env.DB_CONNECTION }}
-        DB_HOST: ${{ env.DB_HOST }}
-        DB_PORT: ${{ env.DB_PORT }}
-        DB_DATABASE: ${{ env.DB_DATABASE }}
-        DB_USERNAME: ${{ env.DB_USERNAME }}
-        DB_PASSWORD: ${{ env.DB_PASSWORD }}
+       DB_CONNECTION: ${{ env.DB_CONNECTION }}
+       DB_HOST: ${{ env.DB_HOST }}
+       DB_PORT: ${{ env.DB_PORT }}
+       DB_DATABASE: ${{ env.DB_DATABASE }}
+       DB_USERNAME: ${{ env.DB_USERNAME }}
+       DB_PASSWORD: ${{ env.DB_PASSWORD }}
       run: vendor/bin/phpunit
