@@ -74,6 +74,5 @@ jobs:
           ECR_REPOSITORY: ataytus-test-php
           IMAGE_TAG: ${{ github.sha }}
         run: |
-         php artisan key:generate > key_generate_output.txt
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
          docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
