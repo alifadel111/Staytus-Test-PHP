@@ -48,14 +48,11 @@ jobs:
         run: vendor/bin/phpunit
 
        
-      - run: docker build --tag staytus-test-php:v1 .
-      - name: Push to ECR
-        id: ecr
-        uses: jwalton/gh-ecr-push@v1
-        with:
-         access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-         secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         region: us-east-1
-         local-image: staytus-test-php:v1
-         image: staytus-test-php:v1, staytus-test-php:latest
       
+      - name: ecr-publish
+        uses: bitovi/github-actions-ecr-publish@v0.1.0
+        with:
+            aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws_default_region: us-east-1
+            aws_ecr_repo_name: ataytus-test-php
