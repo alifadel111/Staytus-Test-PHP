@@ -25,7 +25,7 @@ FROM php:8.2-cli
 # # Set up Laravel environment
  RUN mv .env.example .env
 
- RUN php artisan key:generate
+#RUN php artisan key:generate
 
  # Expose port 8000 (PHP's built-in server default port)
  EXPOSE 8000
