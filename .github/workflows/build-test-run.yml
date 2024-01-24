@@ -40,3 +40,5 @@ jobs:
        DB_USERNAME: ${{ env.DB_USERNAME }}
        DB_PASSWORD: ${{ env.DB_PASSWORD }}
       run: vendor/bin/phpunit
+      
+      #this pipeline has thefull evn vars
