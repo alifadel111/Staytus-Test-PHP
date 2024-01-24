@@ -52,7 +52,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REPOSITORY: https://hub.docker.com/repository/docker/alijfadel/phptest
+          DOCKER_REPOSITORY: phptest
           IMAGE_TAG: ${{ github.run_number }}
         run: |
           docker build -t $DOCKER_REPOSITORY:$IMAGE_TAG .
