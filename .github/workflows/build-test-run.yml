@@ -13,14 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Copy .env
-      #   run: cp .env.example .env
+      - name: Copy .env
+        run: cp .env.example .env
 
       - name: Install Dependencies
         run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      # - name: Generate key
-      #   run: php artisan key:generate
+      - name: Generate key
+        run: php artisan key:generate
 
       - name: Set file permissions
         run: chmod -R 777 storage bootstrap/cache
