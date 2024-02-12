@@ -3,27 +3,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
-    
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    #   args:
+    #     WWWGROUP: '${WWWGROUP}'
+    # extra_hosts:
+    #   - 'host.docker.internal:host-gateway'
     ports:
-      - '${APP_PORT:-8000}:80'
-      - '${VITE_PORT:-8081}:${VITE_PORT:-8081}'
-    environment:
-      WWWUSER: '${WWWUSER}'
-      LARAVEL_SAIL: 1
-      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-      IGNITION_LOCAL_SITES_PATH: '${PWD}'
+      - '${APP_PORT:-8000}:8000'
+    restart: always
+    
     volumes:
       - '.:/var/www/html'
     networks:
       - sail
     depends_on:
       - mysql
-      - redis
+
   mysql:
         build:
          context: .
@@ -51,9 +45,9 @@ services:
             retries: 3
             timeout: 5s
   redis:
-    build:
-      context: .
-      dockerfile: Dockerfile.redis
+    image: redis:latest
+    container_name: laravel-redis
+    restart: unless-stopped
     ports:
       - '${FORWARD_REDIS_PORT:-6379}:6379'
     volumes:
