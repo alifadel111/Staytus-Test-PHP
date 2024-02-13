@@ -1,3 +1,22 @@
+in this project that was given to me From Staytus 
+we have a laravel app we did dockerize it and build it 
+for local use we used docker-compose
+for pro we did some changes to push it to aws ECR and made new tags to make it easier to continue the dployment some versioning
+the database from ecr works well on the project with artissan migrate 
+the ports and the security groups on aws are all set with the load balancer to list at the ports with the right inbound rules
+database3306 redis 6379 the app on 8080 using 
+the tsk definition has the name and the tag of the container
+the tag latest moves to the new vontainer and comes next to it the run build number of the github action 
+
+
+
+
+
+
+
+
+
+
 # System Admin / DevOps Engineer Test
 
 ## IMPORTANT:
