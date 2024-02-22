@@ -85,7 +85,8 @@ jobs:
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
          docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
 # the latest tag will move to the new image automatically
-
+# yhis is to make auto deploy to ecs 
+# still need to add  the json file for task definition but after deletin resources i commented it 
 
 # - name: Configure AWS credentials
 #       uses: aws-actions/configure-aws-credentials@v1
